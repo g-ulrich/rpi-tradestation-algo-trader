@@ -1,0 +1,47 @@
+{
+  "name": "electron-quick-start",
+  "version": "1.0.0",
+  "description": "A minimal Electron application",
+  "main": "src/main.js",
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-builder"
+  },
+  "build": {
+    "appId": "rpi-tradestation-algo-trader",
+    "productName": "Algo",
+    "files": [
+      "**/*"
+    ],
+    "directories": {
+      "output": "build"
+    },
+    "win": {
+      "target": ["nsis"],
+      "icon": "src/images/icon.ico"
+    },
+    "mac": {
+      "target": ["dmg"],
+      "icon": "src/images/icon.icns"
+    },
+    "linux": {
+      "target": ["deb", "rpm", "AppImage"],
+      "icon": "src/images/icon.png"
+    }
+  },
+  "repository": "https://github.com/electron/electron-quick-start",
+  "keywords": [
+    "Electron",
+    "quick",
+    "start",
+    "tutorial",
+    "demo"
+  ],
+  "author": "GitHub",
+  "license": "CC0-1.0",
+  "dependencies": {
+    "electron": "^33.2.0",
+    "electron-builder": "^25.1.8",
+    "jquery": "^3.7.1"
+  }
+}
