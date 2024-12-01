@@ -52,6 +52,7 @@ class Window {
         icon: this.iconPath,
         width: this.w,
         height: this.h,
+        fullscreen: true,
         webPreferences: {
             nodeIntegration: true,
             contextIsolation: false,
