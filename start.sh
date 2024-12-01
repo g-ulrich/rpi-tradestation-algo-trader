@@ -1,5 +1,5 @@
 #!/bin/bash
-cd /algo
+cd algo
 git pull
 npm run start
 echo finished!
