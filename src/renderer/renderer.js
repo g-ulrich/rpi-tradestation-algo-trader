@@ -10,7 +10,7 @@ const $ = require('jquery');
 
 
 $(()=>{
-    $('html').css('cursor', 'none');
+    $('body').css('cursor', 'none');
     addWindowButtons();
     windowBindings();
 });
