@@ -11,7 +11,7 @@ LOG_FILE="/algo/algo.log"
 exec > >(tee -a "$LOG_FILE") 2>&1
 
 # Change to the algo directory
-cd algo || { log_entry "Failed to change to algo directory"; exit 1; }
+cd /algo || { log_entry "Failed to change to algo directory"; exit 1; }
 
 # Git pull
 if ! git pull; then
