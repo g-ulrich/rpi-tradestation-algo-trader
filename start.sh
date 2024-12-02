@@ -7,7 +7,7 @@ log_entry() {
 }
 
 # Set up logging
-LOG_FILE="/path/to/algo.log"
+LOG_FILE="/algo/algo.log"
 exec > >(tee -a "$LOG_FILE") 2>&1
 
 # Change to the algo directory
