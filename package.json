@@ -17,15 +17,23 @@
       "output": "build"
     },
     "win": {
-      "target": ["nsis"],
+      "target": [
+        "nsis"
+      ],
       "icon": "src/images/icon.ico"
     },
     "mac": {
-      "target": ["dmg"],
+      "target": [
+        "dmg"
+      ],
       "icon": "src/images/icon.icns"
     },
     "linux": {
-      "target": ["deb", "rpm", "AppImage"],
+      "target": [
+        "deb",
+        "rpm",
+        "AppImage"
+      ],
       "icon": "src/images/icon.png"
     }
   },
@@ -40,8 +48,10 @@
   "author": "GitHub",
   "license": "CC0-1.0",
   "dependencies": {
+    "chart.js": "^4.4.7",
     "electron": "^33.2.0",
     "electron-builder": "^25.1.8",
-    "jquery": "^3.7.1"
+    "jquery": "^3.7.1",
+    "lightweight-charts": "^4.2.1"
   }
 }

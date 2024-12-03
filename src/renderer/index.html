@@ -6,18 +6,63 @@
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'">
     <link href="./styles.css" rel="stylesheet">
     <link href="./bootstrap-5.3.3/css/bootstrap.min.css" rel="stylesheet">
+    <link href="./datatables/datatables.min.css" rel="stylesheet">
+    <link href="./scrollbar.css" rel="stylesheet">
+
+    <title>rpi-tradestation</title>
   
   </head>
-  <body class="bg-dark">
-    <div class="text-secondary p-2">
-      <h1>Account Summary</h1>
+  <body class="bg-black overflow-hidden">
+    <!-- <div class="text-secondary vh-100">
+      <canvas id="pie_positions"  aria-label="chart" class="border" style="height:200px;width:200px;"></canvas>
+    </div> -->
+  
+ 
+    <div class="vh-100 container-fluid">
+      <div class="row position-relative vh-100">
+        <div class="col-6">
+          <div class="text-secondary m-0">Portfolio Value</div>
+          <h4 class="m-0 text-white">$10,0000.00</h4>
+          <h6 class="m-0 text-white">$10.4 <i class="fa-solid fa-caret-down"></i> .6%</h6>
+        <!-- Account -->
+        <div class="position-relative" style="height:80px;">
+          <canvas id="accountPie"></canvas>
+        </div>
+
+        <!-- Positions -->
+        <div class="position-relative mt-1" style="height:160px">
+        
+          <canvas id="positionsPie"></canvas>
+        </div>
+        </div>
+
+        <!-- orders -->
+        <div class="col-6 vh-100">
+          <h4 class="text-center text-secondary my-1">Market Open • <span class="text-danger fa-fade">Live</span></h4>
+          <div id="ordersTable">
+
+          </div>
+        </div>
+        
+      </div>
+
+     
 
     </div>
-  
+    
+    
+    
 
 
     <script src="./fontawesome/js/fontawesome.min.js"></script>
     <script src="./fontawesome/js/all.min.js"></script>
     <script src="./renderer.js"></script>
+    <!-- Unique to page -->
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.1.1/chart.min.js"></script> -->
+
+    <script src="./account.js"></script>
+    
+  
+
   </body>
 </html>

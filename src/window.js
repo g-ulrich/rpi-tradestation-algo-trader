@@ -1,14 +1,21 @@
 const { BrowserWindow, ipcMain } = require('electron');
 const path = require('node:path');
 
+// let __dirname;
+// if (typeof __dirname === 'undefined') {
+//   __dirname = path.dirname(new URL(import.meta.url).pathname);
+//   __dirname = __dirname.startsWith('/') ? __dirname.slice(1) : __dirname;
+// }
+
 class Window {
     constructor(width, height){
-        this.w = width || 800;
-        this.h = height || 800;
+        this.w = width || 480;
+        this.h = height || 320;
         this.mainWindow;
         this.indexPath = path.join(__dirname, '/renderer/index.html');
         this.iconPath = path.join(__dirname, '/images/icon.png');
         this.preloadPath = path.join(__dirname, 'preload.js');
+        console.log(this.preloadPath);
     }
 
     initIpc(){
@@ -52,13 +59,17 @@ class Window {
         icon: this.iconPath,
         width: this.w,
         height: this.h,
-        fullscreen: true,
+        fullscreen: process.platform.includes('win') ? false : true,
         webPreferences: {
             nodeIntegration: true,
             contextIsolation: false,
+            webSecurity: false,
+            sandbox: false,
             preload: this.preloadPath
         },
         frame: false,
+        contentSecurityPolicy: "script-src 'self' 'unsafe-inline'; object-src 'self'"
+
       });
       this.mainWindow.loadFile(this.indexPath);
       // mainWindow.webContents.openDevTools()
