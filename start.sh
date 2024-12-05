@@ -20,10 +20,10 @@ LOG_FILE="algo.log"
 exec > >(tee -a "$LOG_FILE") 2>&1
 if check_internet; then
     git pull
-    if [$? -ne 0 ]; then
+    if [$? -ne 1 ]; then
         log_entry "Git pull success."
         npm install
-        if [$? -ne 0 ]; then
+        if [$? -ne 1 ]; then
             log_entry "npm install success!"
             npm run start
         else 
