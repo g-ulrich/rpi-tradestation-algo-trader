@@ -3,10 +3,33 @@ const $ = require('jquery');
 
 
 $(()=>{
-    // $('body').css('cursor', 'none');
-    // addWindowButtons();
-    // windowBindings();
+    console.log(navigator.onLine);
+    if (!isWindows()){
+        $('body').css('cursor', 'none');
+    } else {
+        
+        // addWindowButtons();
+        // windowBindings();
+    }
 });
+
+function isWindows() {
+    // Internet Explorer 11+
+    if (navigator.userAgent.match(/Trident\/7\./)) return true;
+    
+    // Microsoft Edge
+    if (navigator.userAgent.match(/Edge\/(\d+)/)) return true;
+    
+    // Other browsers
+    if (/Windows.*?NT/.test(navigator.userAgent)) return true;
+    
+    // Fallback: Check for Windows-specific features
+    try {
+        return window.navigator.msMaxTouchPoints > 0;
+    } catch (e) {
+        return false;
+    }
+}
 
 function addWindowButtons(){
     $('body').prepend(`
