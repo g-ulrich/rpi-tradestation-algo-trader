@@ -22,6 +22,7 @@ if check_internet; then
     git checkout start.sh
     if git pull; then
         echo "Git pull success."
+        sudo chmod 777 start.sh
         npm install
         if [$? -ne 0 ]; then
             log_entry "npm install failed!"
