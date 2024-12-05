@@ -7,6 +7,7 @@ $(()=>{
     if (!isWindows()){
         $('body').css('cursor', 'none');
     } else {
+
         // addWindowButtons();
         // windowBindings();
     }
