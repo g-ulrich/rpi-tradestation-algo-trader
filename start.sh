@@ -19,8 +19,9 @@ cd algo
 LOG_FILE="algo.log"
 exec > >(tee -a "$LOG_FILE") 2>&1
 if check_internet; then
+    git checkout start.sh
     if git pull; then
-        log_entry "Git pull success."
+        echo "Git pull success."
         npm install
         if [$? -ne 0 ]; then
             log_entry "npm install failed!"
