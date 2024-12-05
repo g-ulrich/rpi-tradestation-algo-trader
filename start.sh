@@ -19,22 +19,21 @@ cd algo
 LOG_FILE="algo.log"
 exec > >(tee -a "$LOG_FILE") 2>&1
 if check_internet; then
-    git pull
-    if [$? -ne 1 ]; then
+    if git pull; then
         log_entry "Git pull success."
         npm install
-        if [$? -ne 1 ]; then
-            log_entry "npm install success!"
+        if [$? -ne 0 ]; then
+            log_entry "npm install failed!"
             npm run start
         else 
-            log_entry "npm install failed!"
+            log_entry "npm install success!"
             npm run start
         fi
     else
-        log_entry "Git pull not success."
+        log_entry "Git pull failed."
         npm run start
     fi
 else
-    log_entry "No internet, defaulting to start.+"
+    log_entry "No internet, defaulting to start."
    npm run start
 fi
