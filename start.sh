@@ -15,6 +15,7 @@ if check_internet; then
     git checkout start.sh
     git pull
     npm install
+    chmod 777 start.sh
     npm run start
 else
     npm run start
