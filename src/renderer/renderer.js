@@ -6,7 +6,14 @@ const {TS} = require('../tradestation/enpoints/main');
 
 $(()=>{
     window.ts = new TS();
-    window.ts.handleRefresh();
+    window.ts.refreshToken()
+    .then(() => {
+    console.log("Token refreshed, now you can proceed with the next actions");
+    // Continue with your logic here...
+    })
+    .catch(error => {
+    console.error("Failed to refresh token:", error);
+    });
     isConnected();
     // if (navigator.onLine) {
     //     window.ts = new TS();
