@@ -12,6 +12,7 @@ check_internet() {
 
 
 if check_internet; then
+    git checkout start.sh
     git pull
     npm install
     npm run start
