@@ -2,8 +2,6 @@
 <html>
   <head>
     <meta charset="UTF-8">
-    <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'">
     <link href="./styles.css" rel="stylesheet">
     <link href="./bootstrap-5.3.3/css/bootstrap.min.css" rel="stylesheet">
     <link href="./datatables/datatables.min.css" rel="stylesheet">
@@ -13,10 +11,9 @@
   
   </head>
   <body class="bg-black overflow-hidden">
-    <!-- <div class="text-secondary vh-100">
-      <canvas id="pie_positions"  aria-label="chart" class="border" style="height:200px;width:200px;"></canvas>
-    </div> -->
-  
+    <div id="internet" class="position-absolute d-none rounded py-2 px-3 text-danger h2 border" style="z-index:999;background-color:rgba(100,100,100,0.6);top:50%;left:50%;transform: translate(-50%, -50%);">
+      No Internet <i class="fa-solid fa-wifi"></i>
+    </div>
  
     <div class="vh-100 container-fluid">
       <div class="row position-relative vh-100">

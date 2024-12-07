@@ -1,11 +1,7 @@
 const { BrowserWindow, ipcMain } = require('electron');
 const path = require('node:path');
+const {TSAuthentication} = require('./tradestation/authentication');
 
-// let __dirname;
-// if (typeof __dirname === 'undefined') {
-//   __dirname = path.dirname(new URL(import.meta.url).pathname);
-//   __dirname = __dirname.startsWith('/') ? __dirname.slice(1) : __dirname;
-// }
 
 class Window {
     constructor(width, height){
@@ -15,19 +11,20 @@ class Window {
         this.indexPath = path.join(__dirname, '/renderer/index.html');
         this.iconPath = path.join(__dirname, '/images/icon.png');
         this.preloadPath = path.join(__dirname, 'preload.js');
-        console.log(this.preloadPath);
+        this.tsAuth = new TSAuthentication();
+
     }
 
     initIpc(){
-        //  // tradestation
-        // ipcMain.on('getRefreshToken', async (event, _) => {
-        //     const tokenObj = await tsAuth.triggerRefresh();
-        //     event.reply('sendRefreshToken', {ts: tokenObj});
-        // });
-        // ipcMain.on('getNewAccessToken', async (event, _) => {
-        //     const tokenObj = await tsAuth.getNewAccessToken();
-        //     event.reply('sendNewAccessToken', {ts: tokenObj});
-        // });
+         // tradestation
+        ipcMain.on('getRefreshToken', async (event, _) => {
+            const tokenObj = await this.tsAuth.triggerRefresh();
+            event.reply('sendRefreshToken', {ts: tokenObj});
+        });
+        ipcMain.on('getNewAccessToken', async (event, _) => {
+            const tokenObj = await this.tsAuth.getNewAccessToken();
+            event.reply('sendNewAccessToken', {ts: tokenObj});
+        });
 
         // WINDOW
         ipcMain.on('minimize-window', () => {
@@ -65,7 +62,8 @@ class Window {
             contextIsolation: false,
             webSecurity: false,
             sandbox: false,
-            preload: this.preloadPath
+            preload: this.preloadPath,
+            csp: false,
         },
         frame: false,
         contentSecurityPolicy: "script-src 'self' 'unsafe-inline'; object-src 'self'"

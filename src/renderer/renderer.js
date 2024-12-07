@@ -1,9 +1,16 @@
 const { ipcRenderer } = require('electron');
 const $ = require('jquery');
+const axios = require('axios');
+const {TS} = require('../tradestation/enpoints/main');
 
 
 $(()=>{
-    console.log(navigator.onLine);
+    window.ts = new TS();
+    window.ts.handleRefresh();
+    isConnected();
+    // if (navigator.onLine) {
+    //     window.ts = new TS();
+    // }
     if (!isWindows()){
         $('body').css('cursor', 'none');
     } else {
@@ -11,7 +18,18 @@ $(()=>{
         // addWindowButtons();
         // windowBindings();
     }
+    setInterval(isConnected, 5000);
 });
+
+function isConnected() {
+    axios.get('https://api.ipify.org')
+    .then(() => { // connected
+        $('#internet').addClass('d-none');
+    })
+    .catch(() => { // not connected
+        $('#internet').removeClass('d-none');
+    });
+}
 
 function isWindows() {
     // Internet Explorer 11+
