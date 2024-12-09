@@ -9,6 +9,7 @@ $(()=>{
     window.ts = new TS();
     window.ts.refreshToken()
     .then(() => {
+        
         if (!isWindows()){
             $('body').css('cursor', 'none');
         }
