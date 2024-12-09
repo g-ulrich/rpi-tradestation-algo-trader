@@ -5,27 +5,25 @@ const {TS} = require('../tradestation/enpoints/main');
 
 
 $(()=>{
+    isConnected();
     window.ts = new TS();
     window.ts.refreshToken()
     .then(() => {
-    console.log("Token refreshed, now you can proceed with the next actions");
-    // Continue with your logic here...
-    })
-    .catch(error => {
-    console.error("Failed to refresh token:", error);
+        if (!isWindows()){
+            $('body').css('cursor', 'none');
+        }
+        setInterval(isConnected, 5000);
+    }).catch(error => {
+        console.log(error);
     });
-    isConnected();
-    // if (navigator.onLine) {
-    //     window.ts = new TS();
-    // }
-    if (!isWindows()){
-        $('body').css('cursor', 'none');
-    } else {
-
-        // addWindowButtons();
-        // windowBindings();
-    }
-    setInterval(isConnected, 5000);
+    setInterval(()=>{
+        window.ts.refreshToken()
+        .then(() => {
+            console.log("Successfully refreshed token.");
+        }).catch(error => {
+            console.log("Failed to refresh token: ", error);
+        });
+    }, 10000);
 });
 
 function isConnected() {

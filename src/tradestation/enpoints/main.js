@@ -72,16 +72,6 @@ async refreshToken() {
   }
 }
 
-async handleRefresh() {
-  try {
-    await tsInstance.refreshToken();
-    console.log("Token refreshed, now you can proceed with the next actions");
-  } catch (error) {
-    console.error("Failed to refresh token:", error);
-  }
-}
-
-
 }
 
 module.exports = {

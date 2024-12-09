@@ -1,4 +1,4 @@
 node_modules/
 build/
 dist/
-algo.log
+start.sh
