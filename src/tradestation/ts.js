@@ -1,5 +1,5 @@
 const {TSEndpoints} = require('./endpoints');
-const { currentESTDatetime } = require('../../renderer/util');
+const { currentESTDatetime } = require('../renderer/util');
 const {Accounts} = require('./accounts');
 const {MarketData} = require('./marketData');
 const {Orders} = require('./orders');

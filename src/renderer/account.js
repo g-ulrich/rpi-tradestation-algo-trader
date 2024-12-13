@@ -1,14 +1,18 @@
 const {AccountDoughnutChart, PositionsPieChart} = require("./chartjs/pies");
-const {randNum} = require('./util');
+const {randNum, formatVolume} = require('./util');
 const {myOrdersTable} = require('./datatables/ordersTable');
 
 $(()=>{
+    $('body div').hide();
+    $('body loader').show();
     window.ts.refreshToken()
     .then(() => {
-        // main();
         new Main();
+        $('body div').show();
+        $('body loader').fadeOut();
     }).catch(error => {
         console.log(error);
+        $('body loader').fadeOut();
     });
 });
 
@@ -50,26 +54,24 @@ class Main{
         if (!this.balPie){
             this.balPie = new AccountDoughnutChart("accountPie")
         }
-        
-        var labels = [];
-        var amts = [];
-        var plTotal = 0;
-        var cashTotal = 0;
-        this.balances.forEach((bal)=>{
-            labels.push(`${bal?.AccountType}: ${parseFloat(bal?.Equity).toFixed(2)}`);
-            amts.push(bal?.Equity);
-            cashTotal += parseFloat(bal?.Equity);
-            plTotal += parseFloat(bal?.TodaysProfitLoss);
-        });
-        labels.push(`Crypto: 0`);
-        labels.push(`Cash: ${cashTotal.toFixed(2)}`);
-        amts.push(0);
-        amts.push(cashTotal);
-        this.balPie.updateLabels(labels);
-        this.balPie.updateData(amts);
-        $("#equity").text(cashTotal.toFixed(2));
+        var equity = this.balances.find(obj => obj.AccountType === "Cash");
+        var eqTotal = parseFloat(equity?.Equity);
+        var eqpl = parseFloat(equity?.TodaysProfitLoss);
+        this.balPie.updateLabels([
+            "Equities $" + formatVolume(eqTotal),
+            "Market $" + formatVolume(parseFloat(equity?.MarketValue)),
+            "Cash $" + formatVolume(parseFloat(equity?.CashBalance))
+        ]);
+        this.balPie.updateData([
+            eqTotal,
+            parseFloat(equity?.MarketValue),
+            parseFloat(equity?.CashBalance),
+        ]);
+        $("#equity").text("$"+eqTotal.toFixed(2));
         $("#pl").empty();
-        $("#pl").append(`${plTotal.toFixed(2)} ${plTotal < 0 ? '<i class="fa-solid fa-caret-down"></i>' : '<i class="fa-solid fa-caret-up"></i>'} ${plTotal < 0 ? '-' : ''}${(Math.abs(plTotal)/cashTotal).toFixed(2)}%`);
+        $("#pl").append(`<div class="text-${eqpl < 0 ? 'danger' : 'success'}">
+            ${eqpl.toFixed(2)} ${eqpl < 0 ? '<i class="fa-solid fa-caret-down"></i>' : '<i class="fa-solid fa-caret-up"></i>'} ${eqpl < 0 ? '-' : ''}${(Math.abs(eqpl)/eqTotal).toFixed(3)}%
+            </div>`);
     }
 
     positionsPie(){
@@ -89,26 +91,26 @@ class Main{
     }
 }
 
-function main(){
-    var c1 = new AccountDoughnutChart("accountPie");
-    var c2 = new PositionsPieChart("positionsPie");
+// function main(){
+//     var c1 = new AccountDoughnutChart("accountPie");
+//     var c2 = new PositionsPieChart("positionsPie");
 
-    try {
-    myOrdersTable('ordersTable');
-    } catch(error) {
-    console.log(error)
-    }
+//     try {
+//     myOrdersTable('ordersTable');
+//     } catch(error) {
+//     console.log(error)
+//     }
 
-    setInterval(()=>{
-    [c1, c2].forEach((cls)=>{
-        var a = randNum(0,100000);
-        var b  = randNum(0,100000);
-        var c = randNum(0,100000);
-        cls.updateLabels([`Equity ${a}`,
-            `Crypto ${b}`, `Cash ${c}`]);
-        cls.updateData([
-            a, b, c
-        ]);
-    });
-    }, 1000); 
-}
+//     setInterval(()=>{
+//     [c1, c2].forEach((cls)=>{
+//         var a = randNum(0,100000);
+//         var b  = randNum(0,100000);
+//         var c = randNum(0,100000);
+//         cls.updateLabels([`Equity ${a}`,
+//             `Crypto ${b}`, `Cash ${c}`]);
+//         cls.updateData([
+//             a, b, c
+//         ]);
+//     });
+//     }, 1000); 
+// }

@@ -1,7 +1,7 @@
 const { ipcRenderer } = require('electron');
 const $ = require('jquery');
 const axios = require('axios');
-const {TS} = require('../tradestation/enpoints/main');
+const {TS} = require('../tradestation/ts');
 
 
 $(()=>{

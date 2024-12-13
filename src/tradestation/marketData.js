@@ -27,7 +27,7 @@
  * - URL: https://api.tradestation.com
  */
 const axios =require('axios');
-const {currentESTTime, isSubStr, inArray}  =require('../../renderer/util');
+const {currentESTTime, isSubStr, inArray}  =require('../renderer/util');
 const { ipcRenderer }  =require("electron");
 
 

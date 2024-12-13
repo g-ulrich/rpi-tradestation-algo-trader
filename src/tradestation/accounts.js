@@ -27,7 +27,7 @@
  * - URL: https://api.tradestation.com
  */
 const axios = require('axios');
-const {currentESTTime, isSubStr} = require('../../renderer/util');
+const {currentESTTime, isSubStr} = require('../renderer/util');
 const { ipcRenderer } = require("electron");
 class Accounts {
   constructor(accessToken) {
