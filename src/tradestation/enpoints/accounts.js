@@ -98,70 +98,26 @@ class Accounts {
    * Fetches the list of Brokerage Accounts available for the current user.
    * @returns {Promise<Array>} - Promise resolving to the list of brokerage accounts.
    */
+
   async getAccounts() {
     this.refreshToken();
     const url = `${this.baseUrl}/accounts`;
-    const response = await axios.get(url, {
-      headers: {
-        Authorization: `Bearer ${this.accessToken}`,
-      },
-    }).then(response => response.data.Accounts)
-    .catch(error => {
-      this.error(`getAccounts() - ${error}, ${this.accessToken}`);
-      throw error;
+  
+    return new Promise((resolve, reject) => {
+      axios.get(url, {
+        headers: {
+          Authorization: `Bearer ${this.accessToken}`,
+        },
+      })
+      .then(response => {
+        const accounts = response.data.Accounts;
+        resolve(accounts);
+      })
+      .catch(error => {
+        this.error(`getAccounts() - ${error}, ${this.accessToken}`);
+        reject(error);
+      });
     });
-    return response;
-  }
-
-  setAllAccounts(setter){
-    (async () => {
-      try {
-        const arr = await this.getAccounts();
-        if (Array.isArray(arr)) {
-          setter(arr);
-        } else {
-          if (!arr?.Error){
-            setter([arr]);
-          }
-        }
-      } catch (error) {
-        this.error(`setAllAccounts() ${error}`);
-      }
-    })();
-  }
-
-  setAccounts(setter, type='Cash'){
-    (async () => {
-      try {
-        const arr = await this.getAccounts();
-        if (type === '') {
-          setter(arr);
-        } else {
-          arr.forEach((i)=>{
-            if (i.AccountType === type) {
-              setter(i);
-            }
-          });
-        }
-      } catch (error) {
-        this.error(`setAccounts() ${error}`);
-      }
-    })();
-  }
-
-  setAccountID(setter, type="Cash"){
-    (async () => {
-      try {
-        const arr = await this.getAccounts();
-        arr.forEach((i)=>{
-          if (i.AccountType === type) {
-            setter(i.AccountID);
-          }
-        });
-      } catch (error) {
-        this.error(`setAccountID() ${error}`);
-      }
-    })();
   }
 
 
@@ -181,20 +137,26 @@ getAccountBalancesAJAX(accountIDs){
     }
   }
 }
-  async getAccountBalances(accounts) {
-    this.refreshToken();
-    if (accounts !== null) {
-      const url = `${this.baseUrl}/accounts/${accounts}/balances`;
-      return axios.get(url, {
-        headers: {
-          Authorization: `Bearer ${this.accessToken}`,
-        },
-      })
-      .then(response => response.data.Balances)
-      .catch(error => {
-        this.error(`getAccountBalances() ${error}`);
-      });
-    }
+
+async getAccountBalances(accounts) {
+  this.refreshToken();
+  const url = `${this.baseUrl}/accounts/${accounts}/balances`;
+
+  return new Promise((resolve, reject) => {
+    axios.get(url, {
+      headers: {
+        Authorization: `Bearer ${this.accessToken}`,
+      },
+    })
+    .then(response => {
+      const bal = response.data.Balances;
+      resolve(bal);
+    })
+    .catch(error => {
+      this.error(`getAccountBalances() - ${error}, ${this.accessToken}`);
+      reject(error);
+    });
+  });
 }
 
 configBalances(arr){
@@ -483,27 +445,27 @@ setHistoricalOrdersBySymbol(setter, symbol, accounts, since, pageSize, nextToken
     }
   }
 
-  getPositions(accounts, symbol) {
+  async getPositions(accounts) {
     this.refreshToken();
-    if (accounts !== null) {
-      const url = `${this.baseUrl}/accounts/${accounts}/positions`;
-
-      // Optional query parameter for symbol
-      // const params = symbol ? { symbol } : {};
-
-      return axios.get(url, {
+    const url = `${this.baseUrl}/accounts/${accounts}/positions`;
+  
+    return new Promise((resolve, reject) => {
+      axios.get(url, {
         headers: {
           Authorization: `Bearer ${this.accessToken}`,
         },
-        // params,
       })
-        .then(response => response.data.Positions)
-        .catch(error => {
-          console.error('Error fetching positions:', error);
-          throw error;
-        });
-    }
+      .then(response => {
+        const pos = response.data.Positions;
+        resolve(pos);
+      })
+      .catch(error => {
+        this.error(`getPositions() - ${error}, ${this.accessToken}`);
+        reject(error);
+      });
+    });
   }
+
 
   setPostions(setter, accounts){
     (async () => {

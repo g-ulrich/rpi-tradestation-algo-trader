@@ -7,23 +7,9 @@ const {TS} = require('../tradestation/enpoints/main');
 $(()=>{
     isConnected();
     window.ts = new TS();
-    window.ts.refreshToken()
-    .then(() => {
-        
-        if (!isWindows()){
-            $('body').css('cursor', 'none');
-        }
-        setInterval(isConnected, 5000);
-    }).catch(error => {
-        console.log(error);
-    });
+    setInterval(isConnected, 5000);
     setInterval(()=>{
-        window.ts.refreshToken()
-        .then(() => {
-            console.log("Successfully refreshed token.");
-        }).catch(error => {
-            console.log("Failed to refresh token: ", error);
-        });
+        window.ts.refreshToken();
     }, 10000);
 });
 
