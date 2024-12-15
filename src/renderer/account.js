@@ -93,7 +93,7 @@ class Main{
     updatePosition(){
         var pos = this.positions[this.posIndex];
         this.posIndex += 1;
-        if (this.posIndex == this.positions.length -1){
+        if (this.posIndex == this.positions.length){
             this.posIndex = 0;
         }
         if (this.positions.length > 0 && pos){
@@ -141,33 +141,10 @@ class Main{
         this.getBalances();
         this.getPositions();
         setInterval(()=>{
+            this.setMarketStatus();
             this.getBalances(); 
             this.getPositions();
         }, 60000);
         
     }
 }
-
-// function main(){
-//     var c1 = new AccountDoughnutChart("accountPie");
-//     var c2 = new PositionsPieChart("positionsPie");
-
-//     try {
-//     myOrdersTable('ordersTable');
-//     } catch(error) {
-//     console.log(error)
-//     }
-
-//     setInterval(()=>{
-//     [c1, c2].forEach((cls)=>{
-//         var a = randNum(0,100000);
-//         var b  = randNum(0,100000);
-//         var c = randNum(0,100000);
-//         cls.updateLabels([`Equity ${a}`,
-//             `Crypto ${b}`, `Cash ${c}`]);
-//         cls.updateData([
-//             a, b, c
-//         ]);
-//     });
-//     }, 1000); 
-// }
