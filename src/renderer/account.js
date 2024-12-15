@@ -1,5 +1,5 @@
 const {AccountDoughnutChart, PositionsPieChart} = require("./chartjs/pies");
-const {randNum, formatVolume} = require('./util');
+const {randNum, formatVolume, isMarketOpen} = require('./util');
 const {myOrdersTable} = require('./datatables/ordersTable');
 
 $(()=>{
@@ -24,6 +24,7 @@ class Main{
         this.positions;
         this.posPie;
         this.balPie;
+        this.posIndex = 0;
         this.init();
     }
 
@@ -46,7 +47,8 @@ class Main{
         await window.ts.account.getPositions(this.accountIds).then(resp =>{
             this.positions = resp;
             console.log(this.positions);
-            // this.positionsPie();
+            this.positionsPie();
+            this.updatePosition();
         });
     }
 
@@ -78,9 +80,64 @@ class Main{
         if (!this.posPie){
             this.posPie = new PositionsPieChart("positionsPie");
         }
+        var labels = [];
+        var values = [];
+        this.positions.forEach((pos)=>{
+            labels.push(`${pos?.Symbol} (${pos?.Quantity})`);
+            values.push(parseFloat(pos?.TotalCost));
+        });
+        this.posPie.updateLabels(labels);
+        this.posPie.updateData(values);
+    }
+
+    updatePosition(){
+        var pos = this.positions[this.posIndex];
+        this.posIndex += 1;
+        if (this.posIndex == this.positions.length -1){
+            this.posIndex = 0;
+        }
+        if (this.positions.length > 0 && pos){
+            var todayspl = parseFloat(pos?.TodaysProfitLoss);
+            var totalpl = parseFloat(pos?.UnrealizedProfitLoss);
+            $(`#position`).empty();
+            $(`#position`).append(`
+                <div class="no-grow px-1">
+                    <h4 title="${pos?.Timestamp}" class="text-white m-0">
+                        <img height="20" width="auto" style="margin-top:-3px;" src="../images/ticker_icons/${pos?.Symbol}.png" />
+                        ${pos?.Symbol} 
+                        <span class="text-secondary"> (${pos?.Quantity}) </span>
+                         <span class="text-secondary">
+                            $${todayspl.toFixed(2)}
+                        </span>
+                    </h4>
+                    <h6 class="m-0">
+                        <span class="text-${totalpl < 0 ? 'danger' : 'success'}">
+                            $${totalpl.toFixed(2)}
+                            <i class="fa-solid fa-caret-${totalpl < 0 ? 'down' : 'up'}"></i> 
+                            ${parseFloat(pos?.UnrealizedProfitLossPercent).toFixed(2)}%
+                        </span>
+                    </h6>
+                </div>
+                <div id="chart" class="grow"></div>
+            `);
+        } else {
+            $('#position').hide();
+        }
+    }
+
+    setMarketStatus(){
+        var status = isMarketOpen();
+        var val = "";
+        if (status == 'closed'){
+            val = "Market Closed";
+        }else{
+            val = status.charAt(0).toUpperCase() + status.slice(1) + "-Market Open";
+        }
+        $('#market_status').text(val);
     }
 
     proceed(){
+        this.setMarketStatus();
         this.getBalances();
         this.getPositions();
         setInterval(()=>{

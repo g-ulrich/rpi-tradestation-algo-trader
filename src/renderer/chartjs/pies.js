@@ -115,7 +115,7 @@ class PositionsPieChart {
             },
             plugins: {
                 legend: {
-                    position: 'bottom', // Move legend to the right
+                    position: 'right', // Move legend to the right
                     labels: {
                         usePointStyle: false, // Use custom points
                         boxWidth: 10, // Thin dots (width)

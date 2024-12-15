@@ -6,7 +6,24 @@
   position: absolute;
 }
 
+.vflex {
+  display: flex;
+  flex-direction: column; 
+  justify-content: space-between;
+  position: relative; 
+  height: 100vh;
+}
+
+.vgrow {
+  flex-grow: 1; 
+}
+
+.vno-grow {
+  flex-grow: 0; 
+}
+
 .flex {
+    position: relative;
     display: flex;
     justify-content: space-between; /* Distributes items evenly across the main axis */
 }

@@ -630,6 +630,11 @@ function getVerticalTabHTML(){
             </div>`;
 }
 
+function isWeekend() {
+  const dayOfWeek = new Date().getDay();
+  return dayOfWeek === 0 || dayOfWeek === 6;
+}
+
 function isMarketOpen() {
   const now = new Date();
   const hr = now.getHours();
@@ -639,7 +644,7 @@ function isMarketOpen() {
   var isReg = t >= 930 && hr <= 16;
   var isPost = hr > 16 && hr <= 20;
   var status = isPre ? 'pre' : isReg ? 'reg' : isPost ? 'post' : 'closed';
-  return status;
+  return isWeekend() ? 'closed' : status;
 }
 
 
@@ -707,4 +712,5 @@ module.exports = {
   sortJsonArrayByKey,
   maxJsonArrayVal,
   minJsonArrayVal,
+  isMarketOpen
 };

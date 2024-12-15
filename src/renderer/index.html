@@ -8,11 +8,11 @@
     <link href="./scrollbar.css" rel="stylesheet">
 
     <title>rpi-tradestation</title>
-    <style>
+    <!-- <style>
       div {
         border: solid 1px #ffffff2c;
       }
-    </style>
+    </style> -->
   </head>
   <body class="bg-black overflow-hidden">
 
@@ -24,20 +24,33 @@
       No Internet <i class="fa-solid fa-wifi"></i>
     </internet>
 
-    <div class="flex">
-        <div class="grow w-50 p-1">
-          <h6 class="text-secondary m-0">Today's Portfolio Value</h6>
-          <h4 id="equity" class="m-0 text-white"></h4>
-          <h6 id="pl" class="m-0 text-white"></h6>
-          <div class="position-relative" style="height:80px;">
-            <canvas id="accountPie"></canvas>
+   
+    
+    <div class="vflex">
+      <div class="vgrow">
+        <div class="flex">
+          <div class="grow w-50 p-1">
+            <h6 class="text-secondary m-0">Today's Portfolio Value</h6>
+            <h4 id="equity" class="m-0 text-white"></h4>
+            <h6 id="pl" class="m-0 text-white"></h6>
+            <div class="position-relative" style="height:80px;">
+              <canvas id="accountPie"></canvas>
+            </div>
+            <div class="position-relative mt-1" style="height:100px">
+              <canvas id="positionsPie"></canvas>
+            </div>
           </div>
-        </div>
-
-        <div class="grow position-relative vh-100 w-50 p-1">
-          <h4 class="text-center text-secondary my-1">Market Open • <span class="text-danger fa-fade">Live</span></h4>
-          <div id="ordersTable"></div>
-        </div>
+  
+          <div class="grow position-relative w-50 p-1">
+            <h4 class="text-center text-secondary my-1">
+              <span id="market_status"></span> • <span class="text-danger fa-fade">Live</span></h4>
+            <div id="ordersTable"></div>
+          </div>
+      </div>
+      </div>
+      <div id="position" class="vno-grow bg-dark flex py-1">
+        
+      </div>
     </div>
  
     <!-- <div class="vh-100 container-fluid">
