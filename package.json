@@ -53,6 +53,7 @@
     "electron": "^33.2.0",
     "electron-builder": "^25.1.8",
     "jquery": "^3.7.1",
-    "lightweight-charts": "^4.2.1"
+    "lightweight-charts": "^4.2.1",
+    "request": "^2.88.2"
   }
 }

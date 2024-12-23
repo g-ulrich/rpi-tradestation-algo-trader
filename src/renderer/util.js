@@ -402,8 +402,19 @@ const rgbColors = [
   "rgb(255, 69, 0)"  // Orange-Red
 ];
 
-const getRandomRGB = () => {
-  return rgbColors[Math.floor(Math.random() * rgbColors.length)];
+function getRandomBoldRGBA(opacity = 1) {
+  const r = Math.floor(Math.random() * 256);
+  const g = Math.floor(Math.random() * 256);
+  const b = Math.floor(Math.random() * 256);
+
+  // Ensure the color is bold by checking its brightness
+  const brightness = (r * 299 + g * 587 + b * 114) / 1000;
+  if (brightness < 128) {
+      // If too dark, lighten it up
+      return `rgba(${Math.min(r + 128, 255)}, ${Math.min(g + 128, 255)}, ${Math.min(b + 128, 255)}, ${opacity})`;
+  }
+
+  return `rgba(${r}, ${g}, ${b}, ${opacity})`;
 }
 
 const findObjectById = (jsonArray, key, value) => {
@@ -647,6 +658,14 @@ function isMarketOpen() {
   return isWeekend() ? 'closed' : status;
 }
 
+function getRandomColor() {
+  let letters = '0123456789ABCDEF';
+  let color = '#';
+  for (let i = 0; i < 6; i++) {
+      color += letters[Math.floor(Math.random() * 16)];
+  }
+  return color;
+}
 
 function formatDateWithPrecision(dateString) {
   const date = new Date(dateString);
@@ -689,6 +708,7 @@ module.exports = {
   generateCandleData,
   convertJSONArrayToJSON,
   inJsonArray,
+  getRandomColor,
   jsonArrayToArrayByKey,
   arrayToJsonArray,
   isSubStr,
@@ -697,7 +717,7 @@ module.exports = {
   isFloat,
   isStringInArray,
   rgbColors,
-  getRandomRGB,
+  getRandomBoldRGBA,
   findObjectById,
   removeDupsFromJsonArr,
   getDateNDaysAgo,

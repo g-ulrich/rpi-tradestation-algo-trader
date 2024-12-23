@@ -1,5 +1,7 @@
 const Chart = require('chart.js/auto'); // Import Chart.js
+const {getRandomBoldRGBA} = require('../util');
 const $ = require('jquery');
+
 
 class AccountDoughnutChart {
     constructor(id) {
@@ -9,16 +11,14 @@ class AccountDoughnutChart {
             labels: ['Equities', 'Crypto', 'Cash'], // Updated to 3 data points
             datasets: [{
                 label: 'Dataset',
-                data: [12, 19, 3], // Corresponding data points
+                data: [12], // Corresponding data points
                 backgroundColor: [
-                    'rgba(255, 99, 132, 0.6)',
-                    'rgba(54, 162, 235, 0.6)',
-                    'rgba(255, 206, 86, 0.6)'
+                    getRandomBoldRGBA(.6),
+                    getRandomBoldRGBA(.6),
+                    getRandomBoldRGBA(.6),
                 ],
                 borderColor: [
-                    'rgba(255, 99, 132, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(255, 206, 86, 1)'
+                    'rgba(255, 255, 255, .5)',
                 ],
                 borderWidth: 1
             }]
@@ -84,22 +84,8 @@ class PositionsPieChart {
         this.id = id; // ID of the canvas element
         this.chart = null; // Placeholder for the chart instance
         this.data = {
-            labels: ['Equities', 'Crypto', 'Cash'], // Updated to 3 data points
-            datasets: [{
-                label: 'Dataset',
-                data: [12, 19, 3], // Corresponding data points
-                backgroundColor: [
-                    'rgba(255, 99, 132, 0.6)',
-                    'rgba(54, 162, 235, 0.6)',
-                    'rgba(255, 206, 86, 0.6)'
-                ],
-                borderColor: [
-                    'rgba(255, 99, 132, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(255, 206, 86, 1)'
-                ],
-                borderWidth: 1
-            }]
+            labels: [], // Updated to 3 data points
+            datasets: []
         };
 
         this.options = {
@@ -132,19 +118,12 @@ class PositionsPieChart {
 
         this.render();
     }
+
+    update(data){
+        this.chart.data.datasets = data;
+        this.chart.update();
+    }
       
-    updateLabels(newLabels) {
-        // Update the labels dynamically
-        this.chart.data.labels = newLabels;
-        this.chart.update(); // Re-render the chart
-    }
-
-    updateData(newData) {
-        // Update the data dynamically
-        this.chart.data.datasets[0].data = newData;
-        this.chart.update(); // Re-render the chart
-    }
-
     render() {
         const ctx = document.getElementById(this.id).getContext("2d");
         this.chart = new Chart(ctx, {

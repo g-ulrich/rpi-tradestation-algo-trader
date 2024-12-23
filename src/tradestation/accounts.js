@@ -29,10 +29,54 @@
 const axios = require('axios');
 const {currentESTTime, isSubStr} = require('../renderer/util');
 const { ipcRenderer } = require("electron");
+const request = require('request');
+
+
+class StreamHandler {
+  constructor(baseUrl, accessToken) {
+    this.baseUrl = baseUrl;
+    this.accessToken = accessToken;
+  }
+
+  connectPositions(accountIds, onData, onError) {
+    const options = {
+      method: 'GET',
+      url: `${this.baseUrl}/stream/accounts/${accountIds}/positions`,
+      headers: {
+        'Authorization': `Bearer ${this.accessToken}`,
+        'Accept': 'application/vnd.tradestation.streams.v3+json'
+      }
+    };
+
+    return request(options)
+    .on('data', (chunk) => {
+      try {
+        // Split the chunk into individual JSON objects
+        const messages = chunk.toString().split('\n');
+        messages.forEach(message => {
+          if (message.trim()) {
+            try {
+              const data = JSON.parse(message);
+              onData(data);
+            } catch (e) {
+              // Ignore parsing errors for individual messages
+              // console.warn(`Ignoring invalid JSON: ${message}`);
+            }
+          }
+        });
+      } catch (e) {
+        onError(new Error(`Parse error: ${e.message}`));
+      }
+    })
+    .on('error', onError);
+  }
+}
+
 class Accounts {
   constructor(accessToken) {
     this.baseUrl = 'https://api.tradestation.com/v3/brokerage';
     this.accessToken = accessToken;
+    this.stream = new StreamHandler(this.baseUrl, this.accessToken);
     this.isRefreshingToken = false;
     // streams
     this.allStreams = {};
@@ -190,7 +234,6 @@ setAllAccountBalances(setter, accountIds){
     })();
   }
 }
-
 
 setAccountBalances(setter, accountIds, type='Cash'){
   if (accountIds !== null || typeof accountIds !== 'undefined') {
@@ -725,8 +768,6 @@ setHistoricalOrdersBySymbol(setter, symbol, accounts, since, pageSize, nextToken
       this.info(`${symbol} stream already active.`)
     }
   }
-
-
 }
 
 module.exports = {Accounts: Accounts}
