@@ -103,7 +103,7 @@ class Main{
             $(`#position`).append(`
                 <div class="no-grow px-1">
                     <h4 title="${pos?.Timestamp}" class="text-white m-0">
-                        <img height="20" width="auto" style="margin-top:-3px;" src="../images/ticker_icons/${pos?.Symbol}.png" />
+                        <img height="20" width="auto" alt="" style="margin-top:-3px;" src="../images/ticker_icons/${pos?.Symbol}.png" />
                         ${pos?.Symbol} 
                         <span class="text-secondary"> (${pos?.Quantity}) </span>
                          <span class="text-secondary">
