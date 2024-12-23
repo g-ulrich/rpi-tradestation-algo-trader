@@ -1,6 +1,7 @@
 const {AccountDoughnutChart, PositionsPieChart} = require("./chartjs/pies");
 const {randNum, formatVolume, isMarketOpen, getRandomBoldRGBA} = require('./util');
-const {myOrdersTable} = require('./datatables/ordersTable');
+const {SimpleTableData} = require('./simple');
+const { getOrderColumns } = require('./myColumns/orders');
 
 $(()=>{
     $('body div').hide();
@@ -25,6 +26,12 @@ class Main{
         this.posPie;
         this.balPie;
         this.posIndex = 0;
+        this.ordersTable = new SimpleTableData({
+            title: "Todays Orders",
+            containerID: "ordersTable",
+            columns: getOrderColumns(),
+            dom: 't',
+        });
         this.init();
     }
 
@@ -47,6 +54,7 @@ class Main{
         await window.ts.account.getPositions(this.accountIds).then(resp =>{
             this.positions = resp;
             this.positionsPie();
+            this.updatePositionIndex();
         });
     }
 
@@ -57,7 +65,7 @@ class Main{
         $("#equity").text("$"+eqTotal.toFixed(2));
         $("#pl").empty();
         $("#pl").append(`<div class="text-${eqpl < 0 ? 'danger' : 'success'}">
-            ${eqpl.toFixed(2)} ${eqpl < 0 ? '<i class="fa-solid fa-caret-down"></i>' : '<i class="fa-solid fa-caret-up"></i>'} ${eqpl < 0 ? '-' : ''}${(Math.abs(eqpl)/eqTotal).toFixed(3)}%
+            ${eqpl.toFixed(2)} ${eqpl < 0 ? '<i class="fa-solid fa-caret-down"></i>' : '<i class="fa-solid fa-caret-up"></i>'} ${eqpl < 0 ? '-' : ''}${(eqpl/eqTotal).toFixed(3)}%
             </div>`);
 
         var labels = [
@@ -104,7 +112,6 @@ class Main{
     }
 
     updatePositionIndex(){
-        var pos = this.positions[this.posIndex];
         this.posIndex += 1;
         if (this.posIndex == this.positions.length){
             this.posIndex = 0;
@@ -169,7 +176,7 @@ class Main{
             (error) => {
               console.error('Stream error:', error);
             }
-          );
+        );
     }
 
     proceed(){
@@ -177,12 +184,10 @@ class Main{
         this.setMarketStatus();
         this.getBalances();
         this.getPositions();
-        this.updatePositionIndex();
         setInterval(()=>{
             this.updatePositionIndex();
             this.setMarketStatus();
             this.getBalances();
         }, 60000);
-        
     }
 }

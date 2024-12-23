@@ -59,8 +59,6 @@ class StreamHandler {
               const data = JSON.parse(message);
               onData(data);
             } catch (e) {
-              // Ignore parsing errors for individual messages
-              // console.warn(`Ignoring invalid JSON: ${message}`);
             }
           }
         });

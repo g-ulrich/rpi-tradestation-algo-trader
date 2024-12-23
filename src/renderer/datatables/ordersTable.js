@@ -4,7 +4,7 @@ const { getOrderColumns } = require('./myColumns/orders');
 
 
 function myOrdersTable(id) {
-    new SimpleTableData({
+    return new SimpleTableData({
         title: "Todays Orders",
         containerID: id,
         columns: getOrderColumns(),

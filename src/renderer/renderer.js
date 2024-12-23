@@ -5,6 +5,11 @@ const {TS} = require('../tradestation/ts');
 
 
 $(()=>{
+    $("body").css("cursor", "none");
+    if (isWindows()) {
+        addWindowButtons();
+        windowBindings();
+    }
     isConnected();
     window.ts = new TS();
     setInterval(isConnected, 5000);
