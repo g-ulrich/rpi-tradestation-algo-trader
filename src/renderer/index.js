@@ -1,7 +1,7 @@
 const {AccountDoughnutChart, PositionsPieChart} = require("./chartjs/pies");
 const {randNum, formatVolume, isMarketOpen, getRandomBoldRGBA} = require('./util');
-const {SimpleTableData} = require('./simple');
-const { getOrderColumns } = require('./myColumns/orders');
+const {SimpleTableData} = require('./datatables/simple');
+const { getOrderColumns } = require('./datatables/myColumns/orders');
 
 $(()=>{
     $('body div').hide();
