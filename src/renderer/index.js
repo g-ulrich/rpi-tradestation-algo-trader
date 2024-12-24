@@ -66,7 +66,7 @@ class Main{
         $("#equity").text("$"+eqTotal.toFixed(2));
         $("#pl").empty();
         $("#pl").append(`<div class="text-${eqpl < 0 ? 'danger' : 'success'}">
-            ${eqpl.toFixed(2)} ${eqpl < 0 ? '<i class="fa-solid fa-caret-down"></i>' : '<i class="fa-solid fa-caret-up"></i>'} ${eqpl < 0 ? '-' : ''}${(eqpl/eqTotal).toFixed(3)}%
+            ${eqpl.toFixed(2)} ${eqpl < 0 ? '<i class="fa-solid fa-caret-down"></i>' : '<i class="fa-solid fa-caret-up"></i>'} ${eqpl < 0 ? '-' : ''}${((eqpl/eqTotal)*100).toFixed(3)}%
             </div>`);
 
         var labels = [
