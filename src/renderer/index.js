@@ -25,6 +25,7 @@ class Main{
         this.positions;
         this.posPie;
         this.balPie;
+        this.progress = 0;
         this.posIndex = 0;
         this.ordersTable = new SimpleTableData({
             title: "Todays Orders",
@@ -54,7 +55,7 @@ class Main{
         await window.ts.account.getPositions(this.accountIds).then(resp =>{
             this.positions = resp;
             this.positionsPie();
-            this.updatePositionIndex();
+            this.updatePositionHTML(this.positions[this.posIndex]);
         });
     }
 
@@ -111,13 +112,6 @@ class Main{
         this.posPie.chart.update();
     }
 
-    updatePositionIndex(){
-        this.posIndex += 1;
-        if (this.posIndex == this.positions.length){
-            this.posIndex = 0;
-        }
-    }
-
     updatePositionHTML(pos){
         if (this.positions.length > 0 && pos){
             var todayspl = parseFloat(pos?.TodaysProfitLoss);
@@ -125,24 +119,26 @@ class Main{
             var totalpl = parseFloat(pos?.UnrealizedProfitLoss);
             $(`#position`).empty();
             $(`#position`).append(`
-                <div class="grow px-1">
-                    <h4 title="${pos?.Timestamp}" class="text-white m-0">
-                        <img height="20" width="auto" alt="" style="margin-top:-3px;" src="../images/ticker_icons/${pos?.Symbol}.png" />
-                        ${pos?.Symbol} 
-                        (${pos?.Quantity})
-                        $${parseFloat(pos?.Last).toFixed(3)}
-                        <span class="text-secondary float-end"> $${parseFloat(pos?.AveragePrice).toFixed(3)}<sup><i>A</i></sup> $${totalCost.toFixed(2)}</span>
-                    </h4>
-                    <h6 class="m-0">
-                        <span class="text-${todayspl < 0 ? 'danger' : 'success'}">
-                            $${todayspl.toFixed(3)} <i class="fa-solid fa-caret-${todayspl < 0 ? 'down' : 'up'}"></i> 
-                            ${((todayspl/totalCost)*100).toFixed(3)}%
-                        </span>
-                         <span class="float-end text-${totalpl < 0 ? 'danger' : 'success'}">
-                            $${totalpl.toFixed(3)} <i class="fa-solid fa-caret-${totalpl < 0 ? 'down' : 'up'}"></i> 
-                            ${parseFloat(pos?.UnrealizedProfitLossPercent).toFixed(3)}%
-                        </span>
-                    </h6>
+                <div class="flex">
+                    <div class="grow px-1">
+                        <h4 title="${pos?.Timestamp}" class="text-white m-0">
+                            <img height="20" width="auto" alt="" style="margin-top:-3px;" src="../images/ticker_icons/${pos?.Symbol}.png" />
+                            ${pos?.Symbol} 
+                            (${pos?.Quantity})
+                            $${parseFloat(pos?.Last).toFixed(3)}
+                            <span class="text-secondary float-end"> $${parseFloat(pos?.AveragePrice).toFixed(3)}<sup><i>A</i></sup> $${totalCost.toFixed(2)}</span>
+                        </h4>
+                        <h6 class="m-0">
+                            <span class="text-${todayspl < 0 ? 'danger' : 'success'}">
+                                $${todayspl.toFixed(3)} <i class="fa-solid fa-caret-${todayspl < 0 ? 'down' : 'up'}"></i> 
+                                ${((todayspl/totalCost)*100).toFixed(3)}%
+                            </span>
+                            <span class="float-end text-${totalpl < 0 ? 'danger' : 'success'}">
+                                $${totalpl.toFixed(3)} <i class="fa-solid fa-caret-${totalpl < 0 ? 'down' : 'up'}"></i> 
+                                ${parseFloat(pos?.UnrealizedProfitLossPercent).toFixed(3)}%
+                            </span>
+                        </h6>
+                    </div>
                 </div>
             `);
         } else {
@@ -180,14 +176,33 @@ class Main{
     }
 
     proceed(){
+        var loop = 10000;
+        this.getPositions();
         this.initStreamPositions();
         this.setMarketStatus();
         this.getBalances();
-        this.getPositions();
+        let startTime = Date.now();
+        let elapsedTime = 0;
         setInterval(()=>{
-            this.updatePositionIndex();
+            startTime = Date.now();
+            elapsedTime = 0;
+            this.posIndex += 1;
+            if (this.posIndex == this.positions.length){
+                this.posIndex = 0;
+            }
+            this.updatePositionHTML(this.positions[this.posIndex]);
             this.setMarketStatus();
             this.getBalances();
-        }, 60000);
+        }, loop);
+
+        setInterval(()=>{
+            const now = Date.now();
+            elapsedTime = now - startTime || now;
+            var per = (elapsedTime / loop) * 100;
+            this.progress = per;
+            console.log(`Current elapsed time: ${elapsedTime}ms ${per}%`);
+            $(".progress-bar").css('width', `${per}%`);
+            $(".progress-bar").attr('aria-valuenow', `${per}`);
+        }, 500);
     }
 }
